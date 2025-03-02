@@ -7,6 +7,8 @@ set(CMAKE_CXX_FLAGS "-Werror -Wall -g -pedantic")
 
 set(SOURCES
     "src/Main.cpp"
+    "src/Config.cpp"
+    "src/ConfigSerializer.cpp"
 )
 
 project(ConfigurationSystem LANGUAGES CXX VERSION 1.0.0)
