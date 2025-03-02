@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <variant>
 #include <vector>
 #include <cctype>
@@ -45,7 +45,7 @@ Config Serialization::DeserializePlainText(const std::filesystem::path& path)
     if (!file)
         throw std::runtime_error{"Error opening file: " + path.string()};
 
-    std::unordered_map<std::string, Config::Setting> config{};
+    std::map<std::string, Config::Setting> config{};
     std::string file_line{};
 
     while (std::getline(file, file_line))
@@ -70,9 +70,38 @@ Config Serialization::DeserializePlainText(const std::filesystem::path& path)
 
 void Serialization::SerializeJSON(const std::filesystem::path& path, const Config& cfg)
 {
+    
 }
 
 Config Serialization::DeserializeJSON(const std::filesystem::path& path)
+{
+    return Config();
+}
+
+void Serialization::SerializeXML(const std::filesystem::path& path, const Config& cfg)
+{
+}
+
+Config Serialization::DeserializeXML(const std::filesystem::path& path)
+{
+    return Config();
+}
+
+void Serialization::SerializeBinary(const std::filesystem::path& path, const Config& cfg)
+{
+}
+
+Config Serialization::DeserializeBinary(const std::filesystem::path& path)
+{
+    return Config();
+}
+
+void Serialization::SerializeYAML(const std::filesystem::path& path)
+{
+
+}
+
+Config Serialization::DeserializeYAML(const std::filesystem::path& path)
 {
     return Config();
 }

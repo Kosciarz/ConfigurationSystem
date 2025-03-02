@@ -2,10 +2,21 @@
 #include "ConfigSerializer.hpp"
 
 #include <iostream>
-#include <unordered_map>
+#include <map>
+#include <string>
+#include <vector>
+
+std::vector<std::string> ParseArguments(const std::size_t argc, char* argv[])
+{
+    std::vector<std::string> args{};
+    args.reserve(argc - 1);
+    for (std::size_t i{1}; i < argc; ++i)
+        args.emplace_back(argv[i]);
+    return args;
+}
 
 template <typename Key, typename Value>
-void PrintVariant(const std::unordered_map<Key, Value>& map)
+void PrintConfig(const std::map<Key, Value>& map)
 {
     for (const auto& [setting, value] : map)
     {
@@ -23,12 +34,13 @@ void PrintVariant(const std::unordered_map<Key, Value>& map)
     }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+    std::vector<std::string> args = ParseArguments(argc, argv);
 
     try
     {
-        auto config = Serialization::DeserializePlainText("../config-example.txt");
+        auto config = Serialization::DeserializePlainText(args[0]);
 
         config.SetSetting("Name", "Example");
         config.SetSetting("Health", 100);
@@ -38,9 +50,9 @@ int main()
         auto health = config.GetValue("Health");
         auto damage = config.GetValue("Damage");
 
-        Serialization::SerializePlainText("../config-example.txt", config);
+        Serialization::SerializePlainText(args[0], config);
 
-        PrintVariant(config.Data());
+        PrintConfig(config.Data());
     }
     catch (const std::exception& e)
     {

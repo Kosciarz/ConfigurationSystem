@@ -2,8 +2,9 @@
 #define CONFIG_HPP
 
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <variant>
+#include <string_view>
 
 class Config
 {
@@ -12,16 +13,18 @@ public:
 
     Config();
 
-    Config(std::unordered_map<std::string, Setting>);
+    Config(std::map<std::string, Setting>);
 
-    void SetSetting(const std::string& name, const Setting& value);
+    void SetSetting(std::string_view name, const Setting& value);
 
-    Setting GetValue(const std::string& name) const;
+    Setting GetValue(std::string_view name) const;
 
-    std::unordered_map<std::string, Setting> Data() const { return m_settings; }
+    std::string GetValueString(std::string_view name) const;
+
+    std::map<std::string, Setting> Data() const { return m_settings; }
 
 private:
-    std::unordered_map<std::string, Setting> m_settings;
+    std::map<std::string, Setting> m_settings;
 };
 
 #endif // CONFIG_HPP

@@ -1,5 +1,6 @@
 #include "Config.hpp"
 
+#include <string>
 #include <variant>
 
 Config::Config()
@@ -7,24 +8,22 @@ Config::Config()
 {
 }
 
-Config::Config(std::unordered_map<std::string, Setting> config)
+Config::Config(std::map<std::string, Setting> config)
     : m_settings{config}
 {
 }
 
-void Config::SetSetting(const std::string& name, const Config::Setting& value)
+void Config::SetSetting(std::string_view name, const Config::Setting& value)
 {
-    m_settings[name] = value;
+    m_settings[std::string{name}] = value;
 }
 
-Config::Setting Config::GetValue(const std::string& name) const
+Config::Setting Config::GetValue(std::string_view name) const
 {
-    auto setting = m_settings.at(name);
-
     return std::visit(
         [](auto&& value)
         {
             return Config::Setting{value};
         },
-        setting);
+        m_settings.at(std::string{name}));
 }
