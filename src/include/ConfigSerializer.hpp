@@ -32,7 +32,6 @@ void SerializeYAML(const std::filesystem::path& path);
 
 Config DeserializeYAML(const std::filesystem::path& path);
 
-
 } // namespace Serialization
 
 #endif // CONFIG_SERIALIZER_HPP

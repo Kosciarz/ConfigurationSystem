@@ -1,3 +1,5 @@
+#include "nlohmann/json.hpp"
+
 #include "ConfigSerializer.hpp"
 
 #include <filesystem>
