@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <variant>
+#include <sstream>
 
 class Config
 {
@@ -13,15 +14,10 @@ public:
 
     explicit Config(const std::map<std::string, std::string>& config);
 
-    inline void SetSetting(const std::string& name, const std::string& value)
-    {
-        m_Settings[name] = value;
-    }
+    void SetSetting(const std::string& setting, auto&& value);
 
-    std::string GetValue(const std::string& name) const
-    {
-        return m_Settings.at(name);
-    }
+    template <typename T>
+    std::string GetValue(const std::string& setting) const;
 
     inline std::map<std::string, std::string> Data() const { return m_Settings; }
 
