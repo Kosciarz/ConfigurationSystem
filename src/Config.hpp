@@ -1,27 +1,30 @@
 #pragma once
 
-#include <string>
 #include <map>
+#include <string>
 #include <variant>
-#include <string_view>
+
 
 class Config
 {
 public:
     using Setting = std::variant<int, double, std::string>;
 
-    Config();
+    Config() = default;
 
-    Config(std::map<std::string, Setting>);
+    Config(const std::map<std::string, Setting>& config);
 
-    void SetSetting(std::string_view name, const Setting& value);
+    inline void SetSetting(const std::string& name, const Setting& value)
+    {
+        m_Settings[name] = value;
+    }
 
-    Setting GetValue(std::string_view name) const;
+    Setting GetValue(const std::string& name) const;
 
-    std::string GetValueString(std::string_view name) const;
+    std::string GetValueString(const std::string& name) const;
 
-    std::map<std::string, Setting> Data() const { return m_settings; }
+    std::map<std::string, Setting> Data() const { return m_Settings; }
 
 private:
-    std::map<std::string, Setting> m_settings;
+    std::map<std::string, Setting> m_Settings;
 };

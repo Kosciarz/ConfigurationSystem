@@ -9,9 +9,8 @@
 #include <variant>
 #include <vector>
 #include <cctype>
-#include <string_view>
 
-bool IsInteger(std::string_view str)
+static bool IsInteger(const std::string& str)
 {
     for (const auto& ch : str)
         if (!std::isdigit(ch))
@@ -53,8 +52,8 @@ Config Serialization::DeserializePlainText(const std::filesystem::path& path)
     while (std::getline(file, file_line))
     {
         auto position = std::distance(file_line.begin(), std::ranges::find(file_line, ':'));
-        std::string name = file_line.substr(0, position);
-        std::string value = file_line.substr(position + 2, file_line.size());
+        const std::string name = file_line.substr(0, position);
+        const std::string value = file_line.substr(position + 2, file_line.size());
         
         std::size_t offset = 0;
         if (value.find('.') != std::string::npos)

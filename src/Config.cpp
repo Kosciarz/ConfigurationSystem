@@ -3,27 +3,16 @@
 #include <string>
 #include <variant>
 
-Config::Config()
-    : m_settings{}
+Config::Config(const std::map<std::string, Setting>& config)
+    : m_Settings{config}
 {
 }
 
-Config::Config(std::map<std::string, Setting> config)
-    : m_settings{config}
+Config::Setting Config::GetValue(const std::string& name) const
 {
-}
-
-void Config::SetSetting(std::string_view name, const Config::Setting& value)
-{
-    m_settings[std::string{name}] = value;
-}
-
-Config::Setting Config::GetValue(std::string_view name) const
-{
-    return std::visit(
-        [](auto&& value)
+    return std::visit([](auto&& value)
         {
             return Config::Setting{value};
         },
-        m_settings.at(std::string{name}));
+        m_Settings.at(name));
 }
