@@ -13,10 +13,10 @@ TEST(ConfigTest, InitializesMapWithZero)
 
 TEST(ConfigTest, InitliazesMapWithValue)
 {
-    std::map<std::string, Config::Setting> config = {
-        {"foo", 42},
-        {"bar", 3.14},
-        {"bazz", std::string{"string"}}
+    std::map<std::string, std::string> config = {
+        {"foo", "42"},
+        {"bar", "3.14"},
+        {"bazz", "string"}
     };
 
     Config cfg{config};

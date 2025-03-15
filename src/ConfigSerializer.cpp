@@ -1,37 +1,23 @@
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 
 #include "ConfigSerializer.hpp"
 
-#include <cctype>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <string>
-#include <variant>
 
-static bool IsInteger(const std::string& str)
-{
-    for (const auto& ch : str)
-        if (!std::isdigit(ch))
-            return false;
-    return true;
-}
+using json = nlohmann::json;
 
-void Serialization::SerializePlainText(const std::filesystem::path& path, const Config& cfg)
+void Serialization::SerializePlainText(const std::filesystem::path& path, const Config& config)
 {
     std::ofstream file(path);
     if (!file)
         std::cerr << "Exception opening file: " + path.string();
 
-    for (const auto& [key, value] : cfg.Data())
-    {
-        std::visit([&](const auto& arg)
-            {
-                file << key << ": " << arg << '\n';
-            },
-            value);
-    }
+    for (const auto& [setting, value] : config.Data())
+        file << setting << ": " << value << '\n';
 }
 
 Config Serialization::DeserializePlainText(const std::filesystem::path& path)
@@ -40,36 +26,52 @@ Config Serialization::DeserializePlainText(const std::filesystem::path& path)
     if (!file)
         std::cerr << "Exception opening file: " + path.string();
 
-    std::map<std::string, Config::Setting> config{};
+    Config::Settings newConfig{};
     std::string file_line{};
 
     while (std::getline(file, file_line))
     {
-        auto position = std::distance(file_line.begin(), std::ranges::find(file_line, ':'));
-        const std::string name = file_line.substr(0, position);
-        const std::string value = file_line.substr(position + 2, file_line.size());
+        auto delimPosition = std::distance(file_line.begin(), std::ranges::find(file_line, ':'));
+        const std::string name = file_line.substr(0, delimPosition);
+        const std::string value = file_line.substr(delimPosition + 2, file_line.size());
 
-        std::size_t offset = 0;
-        if (value.find('.') != std::string::npos)
-            config[name] = std::stod(value, &offset);
-        else if (IsInteger(value))
-            config[name] = std::stoi(value);
-        else
-            config[name] = value;
+        newConfig[name] = value;
     }
-    return Config{config};
+    return Config{newConfig};
 }
 
-void Serialization::SerializeJSON(const std::filesystem::path& path, const Config& cfg)
+void Serialization::SerializeJSON(const std::filesystem::path& path, const Config& config)
 {
+    std::ofstream file(path);
+    if (!file)
+        std::cerr << "Exception opening file: " + path.string();
+    
+    json configJson{};
+
+    for (const auto& [setting, value] : config.Data())
+        configJson[setting] = value;
+    
+    file << configJson.dump(4);
 }
 
 Config Serialization::DeserializeJSON(const std::filesystem::path& path)
 {
-    return Config();
+    std::ifstream file(path);
+    if (!file)
+        std::cerr << "Exception opening file: " + path.string();
+
+    Config::Settings newConfig{};
+    
+    json configJson{};
+    file >> configJson;
+
+    for (const auto& [setting, value] : configJson.items())
+        configJson[setting] = value;
+
+    return Config{newConfig};
 }
 
-void Serialization::SerializeXML(const std::filesystem::path& path, const Config& cfg)
+void Serialization::SerializeXML(const std::filesystem::path& path, const Config& config)
 {
 }
 
@@ -78,7 +80,7 @@ Config Serialization::DeserializeXML(const std::filesystem::path& path)
     return Config();
 }
 
-void Serialization::SerializeBinary(const std::filesystem::path& path, const Config& cfg)
+void Serialization::SerializeBinary(const std::filesystem::path& path, const Config& config)
 {
 }
 

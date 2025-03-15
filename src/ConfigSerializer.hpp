@@ -12,19 +12,19 @@
 namespace Serialization
 {
 
-void SerializePlainText(const std::filesystem::path& path, const Config& cfg);
+void SerializePlainText(const std::filesystem::path& path, const Config& config);
 
 Config DeserializePlainText(const std::filesystem::path& path);
 
-void SerializeJSON(const std::filesystem::path& path, const Config& cfg);
+void SerializeJSON(const std::filesystem::path& path, const Config& config);
 
 Config DeserializeJSON(const std::filesystem::path& path);
 
-void SerializeXML(const std::filesystem::path& path, const Config& cfg);
+void SerializeXML(const std::filesystem::path& path, const Config& config);
 
 Config DeserializeXML(const std::filesystem::path& path);
 
-void SerializeBinary(const std::filesystem::path& path, const Config& cfg);
+void SerializeBinary(const std::filesystem::path& path, const Config& config);
 
 Config DeserializeBinary(const std::filesystem::path& path);
 

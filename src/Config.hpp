@@ -7,23 +7,24 @@
 class Config
 {
 public:
-    using Setting = std::variant<int, double, std::string>;
+    using Settings = std::map<std::string, std::string>;
 
     Config() = default;
 
-    Config(const std::map<std::string, Setting>& config);
+    explicit Config(const std::map<std::string, std::string>& config);
 
-    inline void SetSetting(const std::string& name, const Setting& value)
+    inline void SetSetting(const std::string& name, const std::string& value)
     {
         m_Settings[name] = value;
     }
 
-    Setting GetValue(const std::string& name) const;
+    std::string GetValue(const std::string& name) const
+    {
+        return m_Settings.at(name);
+    }
 
-    std::string GetValueString(const std::string& name) const;
-
-    inline std::map<std::string, Setting> Data() const { return m_Settings; }
+    inline std::map<std::string, std::string> Data() const { return m_Settings; }
 
 private:
-    std::map<std::string, Setting> m_Settings;
+    Settings m_Settings;
 };
