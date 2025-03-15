@@ -1,5 +1,4 @@
-#ifndef CONFIG_SERIALIZER_HPP
-#define CONFIG_SERIALIZER_HPP
+#pragma once
 
 #include "Config.hpp"
 
@@ -33,5 +32,3 @@ void SerializeYAML(const std::filesystem::path& path);
 Config DeserializeYAML(const std::filesystem::path& path);
 
 } // namespace Serialization
-
-#endif // CONFIG_SERIALIZER_HPP

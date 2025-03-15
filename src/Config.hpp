@@ -1,5 +1,4 @@
-#ifndef CONFIG_HPP
-#define CONFIG_HPP
+#pragma once
 
 #include <string>
 #include <map>
@@ -9,7 +8,7 @@
 class Config
 {
 public:
-    using Setting = std::variant<std::monostate, int, double, std::string>;
+    using Setting = std::variant<int, double, std::string>;
 
     Config();
 
@@ -26,5 +25,3 @@ public:
 private:
     std::map<std::string, Setting> m_settings;
 };
-
-#endif // CONFIG_HPP

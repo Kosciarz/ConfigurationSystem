@@ -14,10 +14,10 @@ endif()
 
 FetchContent_MakeAvailable(googletest)
 
-set(TEST_NAME ConfigSystemTest)
+enable_testing()
 
-add_executable(${TEST_NAME} "ConfigTest.cpp")
-target_link_libraries(${TEST_NAME} PRIVATE config_lib GTest::gtest_main)
+add_executable(ConfigSystemTest ${TEST_SOURCES})
+target_link_libraries(ConfigSystemTest PRIVATE config_lib GTest::gtest_main)
 
 include(GoogleTest)
-gtest_discover_tests(${TEST_NAME})
+gtest_discover_tests(ConfigSystemTest)

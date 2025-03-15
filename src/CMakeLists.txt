@@ -1,6 +1,8 @@
 set(SOURCES
     "Config.cpp"
+    "Config.hpp"
     "ConfigSerializer.cpp"
+    "ConfigSerializer.hpp"
 )
 
 include(FetchContent)
@@ -11,11 +13,10 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(json)
 
-set(LIB_NAME config_lib)
 
-add_library(${LIB_NAME} STATIC ${SOURCES})
-target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(${LIB_NAME} PRIVATE nlohmann_json::nlohmann_json)
+add_library(config_lib STATIC ${SOURCES})
+target_include_directories(config_lib PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_link_libraries(config_lib PRIVATE nlohmann_json::nlohmann_json)
 
 add_executable(${PROJECT_NAME} "Main.cpp")
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIB_NAME})
+target_link_libraries(${PROJECT_NAME} PRIVATE config_lib)

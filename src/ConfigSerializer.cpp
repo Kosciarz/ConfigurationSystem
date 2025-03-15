@@ -52,8 +52,7 @@ Config Serialization::DeserializePlainText(const std::filesystem::path& path)
 
     while (std::getline(file, file_line))
     {
-        auto delim = std::ranges::find(file_line, ':');
-        auto position = std::distance(file_line.begin(), delim);
+        auto position = std::distance(file_line.begin(), std::ranges::find(file_line, ':'));
         std::string name = file_line.substr(0, position);
         std::string value = file_line.substr(position + 2, file_line.size());
         
@@ -62,8 +61,6 @@ Config Serialization::DeserializePlainText(const std::filesystem::path& path)
             config[name] = std::stod(value, &offset);
         else if (IsInteger(value))
             config[name] = std::stoi(value);
-        else if (value == "null")
-            config[name] = std::monostate{};
         else
             config[name] = value;
     }
