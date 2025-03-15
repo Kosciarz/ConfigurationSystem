@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> ParseArguments(const std::size_t argc, char* argv[])
+std::vector<std::string> ParseArguments(const int argc, char** argv)
 {
     std::vector<std::string> args{};
     args.reserve(argc - 1);
@@ -20,15 +20,9 @@ void PrintConfig(const std::map<Key, Value>& map)
 {
     for (const auto& [setting, value] : map)
     {
-        std::cout << setting << ": ";
-        std::visit(
-            [&](const auto& val)
+        std::visit([&](const auto& val)
             {
-                using T = std::decay_t<decltype(val)>;
-                if constexpr (!std::is_same_v<T, std::monostate>)
-                {
-                    std::cout << val << '\n';
-                }
+                std::cout << setting << ": " << val << '\n';
             },
             value);
     }
@@ -37,20 +31,11 @@ void PrintConfig(const std::map<Key, Value>& map)
 int main(int argc, char* argv[])
 {
     std::vector<std::string> args = ParseArguments(argc, argv);
+    const std::filesystem::path filePath = args[0];
 
     try
     {
-        auto config = Serialization::DeserializePlainText(args[0]);
-
-        config.SetSetting("Name", "Example");
-        config.SetSetting("Health", 100);
-        config.SetSetting("Damage", 20);
-
-        auto name = config.GetValue("Name");
-        auto health = config.GetValue("Health");
-        auto damage = config.GetValue("Damage");
-
-        Serialization::SerializePlainText(args[0], config);
+        auto config = Serialization::DeserializePlainText(filePath);
 
         PrintConfig(config.Data());
     }

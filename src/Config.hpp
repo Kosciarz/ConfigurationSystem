@@ -4,7 +4,6 @@
 #include <string>
 #include <variant>
 
-
 class Config
 {
 public:
@@ -23,7 +22,7 @@ public:
 
     std::string GetValueString(const std::string& name) const;
 
-    std::map<std::string, Setting> Data() const { return m_Settings; }
+    inline std::map<std::string, Setting> Data() const { return m_Settings; }
 
 private:
     std::map<std::string, Setting> m_Settings;
